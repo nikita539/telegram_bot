@@ -1,0 +1,1 @@
+export const TOKEN = "5882302334:AAEGsjeM9GqNs7_FfaRyYLVXb8CkE_vHWc8"
