@@ -8,18 +8,23 @@ bot.start(function(context) {
     context.sendMessage(`Hello my name is ${context.me}!`)
 })
 
-bot.on('text', function(context) {
-    let regexp = new RegExp('gif|гиф','gi')
-    const text =  context.message.text
+bot.on('text', async function(context) {
+    const gifRegexp = new RegExp('gif|гиф','gi')
+    const stickerRegexp = new RegExp('стикер','gi')
+    
 
-
-    if (regexp.test(text)) {
-        GIF_API.getRandomGif().then(function(response) {
-            context.sendAnimation(response.data.data.images.fixed_width_still.url)
-        })
+    if (gifRegexp.test(context.message.text)) {
+        const response = await GIF_API.getRandomGif()
+        context.sendAnimation(response.data.data.images.fixed_width_still.url)
         
         return
+    } else if (stickerRegexp.test(context.message.text)) {
+        const response = await GIF_API.getRandomSticker()
+        context.sendSticker(response.data.data.images.fixed_width_still.url)
+        
+        return 
     }
+
 
     context.sendMessage("Что ты хочешь ?")
    

@@ -16,10 +16,26 @@ const GIF_API = {
             console.log(err)
         })
 
-
+    
         return data
 
+    },
+
+    async getRandomSticker() {
+        const requestURL = `https://${this.STIKERS_URL}/random?api_key=${this.GIF_API_KEY}`
+
+        let data;
+
+        await axios.get(requestURL).then(function(response) {
+            data = response
+        }).catch(function(err) {
+            console.log(err)
+        })
+
+    
+        return data
     }
+
 }
 
 module.exports = {
