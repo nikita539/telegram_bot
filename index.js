@@ -1,34 +1,41 @@
 const Telegraf = require('telegraf');
-const { GIF_API } = require('./gif_api');
 require('dotenv').config();
+const utils = require('./utils')
+
 
 const bot = new Telegraf.Telegraf(process.env.BOT_TOKEN)
+
+bot.telegram.setMyCommands([
+    {
+        command: 'words',
+        description: 'прислать список слов'
+    },
+    {
+        command: 'register_words',
+        description: 'добавить новые слова для изучения в список'
+    },
+    {
+        command: 'learn',
+        description: 'начать изучение слов'
+    }
+])
 
 bot.start(function(context) {
     context.sendMessage(`Hello my name is ${context.me}!`)
 })
 
-bot.on('text', async function(context) {
-    const gifRegexp = new RegExp('gif|гиф','gi')
-    const stickerRegexp = new RegExp('стикер','gi')
+bot.command('register_words', function(context) {
     
-
-    if (gifRegexp.test(context.message.text)) {
-        const response = await GIF_API.getRandomGif()
-        context.sendAnimation(response.data.data.images.fixed_width_still.url)
-        
-        return
-    } else if (stickerRegexp.test(context.message.text)) {
-        const response = await GIF_API.getRandomSticker()
-        context.sendSticker(response.data.data.images.fixed_width_still.url)
-        
-        return 
-    }
-
-
-    context.sendMessage("Что ты хочешь ?")
-   
 })
+
+bot.command('words', function(context) {
+
+})
+
+bot.command('learn', function(context) {
+
+})
+
 
 
 
