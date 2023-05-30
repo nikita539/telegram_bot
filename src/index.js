@@ -1,6 +1,6 @@
-const Telegraf = require('telegraf');
+const Telegraf = require('telegraf')
 require('dotenv').config();
-const utils = require('./utils')
+const words = require('./words.json')
 
 
 const bot = new Telegraf.Telegraf(process.env.BOT_TOKEN)
@@ -29,7 +29,13 @@ bot.command('register_words', function(context) {
 })
 
 bot.command('words', function(context) {
+    const learning_words = []
 
+    Object.keys(words).forEach((key) => {
+        learning_words.push(`${words[key].word} - ${words[key].translate}`)
+    })
+
+    context.sendMessage(learning_words.join('\n'))
 })
 
 bot.command('learn', function(context) {

@@ -1,0 +1,20 @@
+{
+    "0": {
+        "word": "hello",
+        "translate": "привет",
+        "count_showed": "0",
+        "right_answered": "0"
+    },
+    "1": {
+        "word": "world",
+        "translate": "мир",
+        "count_showed": "0",
+        "right_answered": "0"
+    },
+    "2": {
+        "word": "happy",
+        "translate": "счастье",
+        "count_showed": "0",
+        "right_answered": "0"
+    }
+}
