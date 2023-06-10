@@ -1,10 +1,17 @@
-const Telegraf = require('telegraf')
-require('dotenv').config();
-const words = require('./words.json');
-const { getLength, wordIs, createWordObj, dataIsEmpty } = require('./utils');
+const { Telegraf, session } = require('telegraf')
+const { Scenes }  = require('telegraf')
+require('dotenv').config()
+const { register_words_scene } = require('./scenes/register_word_scene.js')
+const { learn_scene } = require('./scenes/learn_scene.js')
 
 
-const bot = new Telegraf.Telegraf(process.env.BOT_TOKEN)
+const bot = new Telegraf(process.env.BOT_TOKEN)
+bot.use(session())
+
+const stage = new Scenes.Stage([register_words_scene , learn_scene])
+bot.use(stage.middleware())
+
+
 
 bot.telegram.setMyCommands([
     {
@@ -29,77 +36,18 @@ bot.start(function(context) {
     context.sendMessage(`Hello my name is ${context.me}!`)
 })
 
-bot.command('register_words', function() {
-    bot.on('text', function(context) {
-        if (getLength(words) > 50) {
-            context.sendMessage('словарь переполнен')
-            return
-        }
-
-        const splited_word = context.message.text.split('-')
-
-        if (wordIs(splited_word[0], words)) {
-            context.sendMessage('такое слово уже есть')
-            return
-        }
-
-        const word = new createWordObj(splited_word[0], splited_word[0])
-
-        words[getLength(words)] = word
-        console.log(words)
-    })
+bot.command('register_words', function(context) {
+    context.scene.leave()
+    context.scene.enter('REGISTER_WORD_SCENE') 
 })
 
-bot.command('words', function(context) {
-    if (!getLength(words)) {
-        context.sendMessage('словарь пуст')
-    }
-
-    const result = Object.keys(words).map((key) => `${words[key].word} - ${words[key].translate}`)
-    context.sendMessage(result.join('\n'))    
-})
+bot.command('words', () => {})
 
 bot.command('learn', function(context) {
-
-    if (dataIsEmpty(words)) {
-        context.reply('словарь пуст, добавь слова')
-        return
-    }
-
-    function sendWords(callback, count) {
-        let i = 0
-
-        async function timeout() {
-            await callback(i)
-                i++
-
-            if (i < count) {
-                timeout()
-            }
-        }
-
-        timeout()
-    }
-
-     async function callback (i) {
-        const message = `как преводиться это слово? ${words[`${i}`].word}`
-        await context.sendMessage(message)
-    }
-
-
-    sendWords(callback, getLength(words))
-
+    context.scene.leave()
+    context.scene.enter('LEARN_SCENE')
 })
 
-bot.command('delete', function(context) {
-    Object.keys(words).forEach((key) => {
-       delete words[key]
-    })
-
-    if (dataIsEmpty(words)) {
-        context.reply('словарь пуст')
-    }
-})
-
+bot.command('delete', () => {})
 
 bot.launch()
