@@ -8,7 +8,7 @@ const {
 
 
 
-const register_words_scene = new Scenes.BaseScene('REGISTER_WORD_SCENE')
+const register_words_scene = new Scenes.BaseScene('REGISTER_WORDS_SCENE')
 
 register_words_scene.enter(function(context) {
     context.reply('напшите несколько слов, они будут добавленны в словарь')

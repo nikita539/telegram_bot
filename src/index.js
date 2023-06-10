@@ -1,6 +1,7 @@
 const { Telegraf, session } = require('telegraf')
 const { Scenes }  = require('telegraf')
 require('dotenv').config()
+const { SCENES_NAMES } = require('./enums/scenes_names.js') 
 const { register_words_scene } = require('./scenes/register_word_scene.js')
 const { learn_scene } = require('./scenes/learn_scene.js')
 
@@ -38,14 +39,14 @@ bot.start(function(context) {
 
 bot.command('register_words', function(context) {
     context.scene.leave()
-    context.scene.enter('REGISTER_WORD_SCENE') 
+    context.scene.enter(SCENES_NAMES.register_words) 
 })
 
 bot.command('words', () => {})
 
 bot.command('learn', function(context) {
     context.scene.leave()
-    context.scene.enter('LEARN_SCENE')
+    context.scene.enter(SCENES_NAMES.learn_words)
 })
 
 bot.command('delete', () => {})

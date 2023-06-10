@@ -7,7 +7,7 @@ const {
 
 
 
-const learn_scene = new Scenes.BaseScene('LEARN_SCENE')
+const learn_scene = new Scenes.BaseScene('LEARN_WORDS_SCENE')
 
 learn_scene.enter((context) => {
     context.reply('Начнем изучение слов. Я буду присылать тебе слово на аглийском, а ты перевод')
