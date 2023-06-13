@@ -5,14 +5,7 @@ const {
     dataIsEmpty
  } = require('../utils.js')
 
-async function leave(context) {
-    if (context.message.text === '/cancel') {
-        await context.scene.leave()
-    }
-}
 
-// TO DO 
-// 1) Создать функционал для режима изучения слов
 
 const learn_scene = new Scenes.BaseScene('LEARN_WORDS_SCENE')
 
@@ -27,9 +20,12 @@ learn_scene.leave((context) => {
 })
 
 learn_scene.on('text', async function(context) {
-    leave(context)
+    if (context.message.text === '/cancel') {
+        await context.scene.leave()
+        return
+    }
 
-    switch(context.message.text) {
+    switch(context.message.text.toLocaleLowerCase()) {
         case 'помоги':
             await context.reply(`это слово преводиться так: ${context.scene.state.sent_word.translate}`)
             break
@@ -40,6 +36,7 @@ learn_scene.on('text', async function(context) {
             if ( context.scene.state.counter == 0 ) {
                 await context.reply('ты прорешал все слова, из словаря')
                 await context.scene.leave()
+                break
             }
 
             context.scene.state.sent_word = words[context.scene.state.counter]

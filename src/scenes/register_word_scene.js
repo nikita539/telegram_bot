@@ -6,11 +6,7 @@ const {
     createWordObj
  } = require('../utils.js')
 
-async function leave(context) {
-    if (context.message.text === '/cancel') {
-        await context.scene.leave()
-    }
-}
+
 
 const register_words_scene = new Scenes.BaseScene('REGISTER_WORDS_SCENE')
 
@@ -23,7 +19,10 @@ register_words_scene.leave(function(context) {
 })
 
 register_words_scene.on('text', async function(context) {
-    leave(context) // выходит из сцены, если была вызвана команда /cancel
+    if (context.message.text === '/cancel') {
+        await context.scene.leave()
+        return
+    }
 
     if (getLength(words) > 50) {
         context.sendMessage('словарь переполнен')
@@ -38,12 +37,13 @@ register_words_scene.on('text', async function(context) {
             return
         }
 
-        const word = new createWordObj(splited_word[0].trim(), splited_word[1].trim())
+        const word = new createWordObj(splited_word[0].trim().toLocaleLowerCase(), splited_word[1].trim().toLocaleLowerCase())
         words[getLength(words)] = word
         return
+    } else {
+        context.reply('напишите слово в формате слово - перевод')
+        return
     }
-
-    context.reply('напишите слово в формате слово - перевод')
 
 })
 module.exports = {
