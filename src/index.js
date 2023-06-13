@@ -30,6 +30,10 @@ bot.telegram.setMyCommands([
     {
         command: 'delete',
         description: 'удалить все слова из словаря'
+    },
+    {
+        command: 'cancel',
+        description: 'закончить действие'
     }
 ])
 
@@ -38,14 +42,12 @@ bot.start(function(context) {
 })
 
 bot.command('register_words', function(context) {
-    context.scene.leave()
-    context.scene.enter(SCENES_NAMES.register_words) 
+    context.scene.enter(SCENES_NAMES.register_words)
 })
 
 bot.command('words', () => {})
 
 bot.command('learn', function(context) {
-    context.scene.leave()
     context.scene.enter(SCENES_NAMES.learn_words)
 })
 

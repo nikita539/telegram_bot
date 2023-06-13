@@ -16,5 +16,23 @@
         "translate": "счастье",
         "count_showed": "0",
         "right_answered": "0"
+    },
+    "3": {
+        "word": "sunny",
+        "translate": "солнечный",
+        "count_showed": "0",
+        "right_answered": "0"
+    },
+    "4": {
+        "word": "to show",
+        "translate": "показывать",
+        "count_showed": "0",
+        "right_answered": "0"
+    },
+    "5": {
+        "word": "to learn",
+        "translate": "учить",
+        "count_showed": "0",
+        "right_answered": "0"
     }
 }
