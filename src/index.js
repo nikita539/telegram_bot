@@ -4,12 +4,13 @@ require('dotenv').config()
 const { SCENES_NAMES } = require('./enums/scenes_names.js') 
 const { register_words_scene } = require('./scenes/register_word_scene.js')
 const { learn_scene } = require('./scenes/learn_scene.js')
+const { show_words_scene } = require('./scenes/show_words_scene.js')
 
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
 bot.use(session())
 
-const stage = new Scenes.Stage([register_words_scene , learn_scene])
+const stage = new Scenes.Stage([register_words_scene , learn_scene, show_words_scene])
 bot.use(stage.middleware())
 
 
@@ -45,7 +46,9 @@ bot.command('register_words', function(context) {
     context.scene.enter(SCENES_NAMES.register_words)
 })
 
-bot.command('words', () => {})
+bot.command('words', (context) => {
+    context.scene.enter(SCENES_NAMES.show_words)
+})
 
 bot.command('learn', function(context) {
     context.scene.enter(SCENES_NAMES.learn_words)

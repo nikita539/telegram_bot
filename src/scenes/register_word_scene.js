@@ -5,10 +5,11 @@ const {
     wordIs,
     createWordObj
  } = require('../utils.js')
+ const { SCENES_NAMES } = require('../enums/scenes_names')
 
 
 
-const register_words_scene = new Scenes.BaseScene('REGISTER_WORDS_SCENE')
+const register_words_scene = new Scenes.BaseScene(SCENES_NAMES.register_words)
 
 register_words_scene.enter(function(context) {
     context.reply('напшите несколько слов, они будут добавленны в словарь')

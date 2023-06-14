@@ -4,10 +4,12 @@ const {
     getLength,
     dataIsEmpty
  } = require('../utils.js')
+ const { SCENES_NAMES } = require('../enums/scenes_names')
 
 
 
-const learn_scene = new Scenes.BaseScene('LEARN_WORDS_SCENE')
+
+const learn_scene = new Scenes.BaseScene(SCENES_NAMES.learn_words)
 
 learn_scene.enter(async (context) => {
     context.scene.state.sent_word = words['0']
