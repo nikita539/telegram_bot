@@ -5,12 +5,18 @@ const { SCENES_NAMES } = require('./enums/scenes_names.js')
 const { register_words_scene } = require('./scenes/register_word_scene.js')
 const { learn_scene } = require('./scenes/learn_scene.js')
 const { show_words_scene } = require('./scenes/show_words_scene.js')
+const { delete_scene } = require('./scenes/delete_scene.js')
 
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
 bot.use(session())
 
-const stage = new Scenes.Stage([register_words_scene , learn_scene, show_words_scene])
+const stage = new Scenes.Stage([
+    register_words_scene , 
+    learn_scene, 
+    show_words_scene,
+    delete_scene
+])
 bot.use(stage.middleware())
 
 
@@ -54,6 +60,8 @@ bot.command('learn', function(context) {
     context.scene.enter(SCENES_NAMES.learn_words)
 })
 
-bot.command('delete', () => {})
+bot.command('delete', (context) => {
+    context.scene.enter(SCENES_NAMES.delete)
+})
 
 bot.launch()

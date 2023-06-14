@@ -1,6 +1,6 @@
 const { Scenes } = require('telegraf')
 const words = require('../words.json')
- const { SCENES_NAMES } = require('../enums/scenes_names')
+const { SCENES_NAMES } = require('../enums/scenes_names')
 
 
 const show_words_scene = new Scenes.BaseScene(SCENES_NAMES.show_words)
