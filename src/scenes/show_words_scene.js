@@ -11,6 +11,9 @@ show_words_scene.enter(function(context) {
     })
     .join('\n')
     context.reply(msg)
+    console.log(Object.keys(context).map((key) => {
+        return context[key]
+    }))
 })
 
 module.exports = {
