@@ -7,6 +7,13 @@ const { learn_scene } = require('./scenes/learn_scene.js')
 const { show_words_scene } = require('./scenes/show_words_scene.js')
 const { delete_scene } = require('./scenes/delete_scene.js')
 
+//TO-DO: новый принцип работы бота. Когда бот активируется, он отправляет сообщение пользователю
+// Привет, ...правила пользования
+// Функционал. Бот всегда принимает слова от пользователя и добавляет их в словарь. Если слово уже есть в словаре, бот его не добавляет
+// если слова нет, то оно добовлятся в виде объекта со свойствами, что бы бот понмал сколько раз то или иное слово отпралялось и тд 
+// что бы начать учить слова, нужно нажать на кнопку учить слова. и бот начнет присылать слова, на котрые пользователь должен ответть переаводом.
+// в зависимости от правильности ответа бот будет что-то отвечать 
+
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
 bot.use(session())
@@ -44,11 +51,12 @@ bot.telegram.setMyCommands([
     }
 ])
 
-bot.start(function(context) {
-    context.sendMessage(`Hello my name is ${context.me}!`)
+bot.start(async function(context) {
+    await context.sendMessage(`Hello my name is ${context.me}!`)
+    await context.reply()
 })
 
-bot.command('register_words', function(context) {
+bot.command('register_words', (context) => {
     context.scene.enter(SCENES_NAMES.register_words)
 })
 
