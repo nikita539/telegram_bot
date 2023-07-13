@@ -12,7 +12,7 @@ const bot = new Telegraf(process.env.BOT_TOKEN)
 bot.use(session())
 
 const stage = new Scenes.Stage([
-    register_words_scene , 
+    register_words_scene, 
     learn_scene, 
     show_words_scene,
     delete_scene

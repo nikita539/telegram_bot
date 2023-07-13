@@ -1,8 +1,7 @@
 const { Scenes } = require('telegraf')
 const words = require('../words.json')
 const { 
-    getLength,
-    dataIsEmpty
+    getLength
  } = require('../utils.js')
  const { SCENES_NAMES } = require('../enums/scenes_names')
 
