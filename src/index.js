@@ -1,4 +1,4 @@
-const { Telegraf, session } = require('telegraf')
+const { Telegraf, session, Composer } = require('telegraf')
 const { Scenes }  = require('telegraf')
 require('dotenv').config()
 const { SCENES_NAMES } = require('./enums/scenes_names.js') 
@@ -14,6 +14,7 @@ const { learn_scene } = require('./scenes/learn_scene.js')
 const bot = new Telegraf(process.env.BOT_TOKEN)
 bot.use(session())
 
+
 const stage = new Scenes.Stage([
     register_words_scene, 
     learn_scene
@@ -21,6 +22,8 @@ const stage = new Scenes.Stage([
 
 
 bot.use(stage.middleware())
+
+console.log(bot.handler)
 
 
 

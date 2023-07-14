@@ -9,35 +9,32 @@ const {
 
 
 
+ const checkWordForRegister = (word) => {
+    return /^[a-z]+\s-\s[a-я]+$/gi.test(word) || /^[a-z]+-[a-я]+$/gi.test(word)
+ }
+ const addWordToVocabulary = (word) => {
+    const splited_word = word.split('-')
+    const result = new createWordObj( splited_word[0].trim(), splited_word[1].trim() )
+    words[getLength(words)] = result
+ }
+
+
+
 const register_words_scene = new Scenes.BaseScene(SCENES_NAMES.register_words)
 
-register_words_scene.enter(function(context) {
-    context.reply('напшите несколько слов, они будут добавленны в словарь')
-})
-
-register_words_scene.leave(function(context) {
-    context.reply(`слова были успешно добавленны`)
-})
-
 register_words_scene.on('text', async function(context) {
-    if (context.message.text === '/learn') {
-        await context.scene.leave()
-    }
+    const userMessage = context.message.text
 
-    if (/^[a-z]+\s-\s[a-я]+$/gi.test(context.message.text)) { // TO DO: написать регялрку для формата ввода (i used to - раньше я )
-        const splited_word = context.message.text.split('-')
+    if (checkWordForRegister(userMessage)) {
+        if (wordIs(userMessage, words)) {
+            return await context.reply('такое слово уже есть')
+        } 
 
-        if (wordIs(splited_word[0], words)) {
-            context.sendMessage('такое слово уже есть')
-            return
-        }
-
-        const word = new createWordObj(splited_word[0].trim().toLocaleLowerCase(), splited_word[1].trim().toLocaleLowerCase())
-        words[getLength(words)] = word
-        return
+        addWordToVocabulary(userMessage)
+        await context.reply('добавил')
+        console.log(words)
     } else {
-        context.reply('напишите слово в формате слово - перевод')
-        return
+        context.reply('введите слово в нужном формате: слово - перевод')
     }
 
 })

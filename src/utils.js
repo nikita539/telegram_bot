@@ -3,7 +3,8 @@ function getLength(obj) {
 }
 
 function wordIs(word, obj) {
-    return  Object.keys(obj).some((key) => obj[key].word === word)
+  const splited_word = word.split('-')
+  return  Object.keys(obj).some((key) => obj[key].word === splited_word[0].trim())
 }
 
 function createWordObj(word,translate) {
