@@ -20,14 +20,8 @@ register_words_scene.leave(function(context) {
 })
 
 register_words_scene.on('text', async function(context) {
-    if (context.message.text === '/cancel') {
+    if (context.message.text === '/learn') {
         await context.scene.leave()
-        return
-    }
-
-    if (getLength(words) > 50) {
-        context.sendMessage('словарь переполнен')
-        return
     }
 
     if (/^[a-z]+\s-\s[a-я]+$/gi.test(context.message.text)) { // TO DO: написать регялрку для формата ввода (i used to - раньше я )
