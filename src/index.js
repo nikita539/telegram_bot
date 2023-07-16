@@ -1,4 +1,4 @@
-const { Telegraf, session, Composer } = require('telegraf')
+const { Telegraf, session } = require('telegraf')
 const { Scenes }  = require('telegraf')
 require('dotenv').config()
 const { SCENES_NAMES } = require('./enums/scenes_names.js') 

@@ -25,6 +25,8 @@ const register_words_scene = new Scenes.BaseScene(SCENES_NAMES.register_words)
 register_words_scene.on('text', async function(context) {
     const userMessage = context.message.text
 
+    if (userMessage === '/learn') return context.scene.leave()
+
     if (checkWordForRegister(userMessage)) {
         if (wordIs(userMessage, words)) {
             return await context.reply('такое слово уже есть')
@@ -32,7 +34,6 @@ register_words_scene.on('text', async function(context) {
 
         addWordToVocabulary(userMessage)
         await context.reply('добавил')
-        console.log(words)
     } else {
         context.reply('введите слово в нужном формате: слово - перевод')
     }

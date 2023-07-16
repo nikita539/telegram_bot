@@ -10,48 +10,53 @@ const {
 
 const learn_scene = new Scenes.BaseScene(SCENES_NAMES.learn_words)
 
+// TO-DO: алгоритм работы сцены. Сцена присылает слово на аглийском, в ответ на это сообщение
+// пользователь присылает перевод этого слова, если перевод верный, сцена присылает новое слово,
+
+
 learn_scene.enter(async (context) => {
     context.scene.state.sent_word = words['0']
-    context.scene.state.counter = getLength(words) - 1
-    console.log(context.scene.state.counter)
     await context.reply(`Начнем изучение слов. Я буду присылать тебе слово на аглийском, а ты перевод\n как переводиться это слово ? ${words['0'].word}`)
+    context.scene.state.counter = 1
+    context.scene.state.mistake = 0
 })
 learn_scene.leave((context) => {
     context.reply('молодец, продолжай изучение новых слов')
 })
 
 learn_scene.on('text', async function(context) {
-    if (context.message.text === '/cancel') {
-        await context.scene.leave()
-        return
+    function sendWord() {
+        context.reply(`${words[context.scene.state.counter]?.word}`)
+        context.scene.state.sent_word = words[context.scene.state.counter]
+        context.scene.state.counter++
     }
 
-    switch(context.message.text.toLocaleLowerCase()) {
-        case 'помоги':
-            await context.reply(`это слово преводиться так: ${context.scene.state.sent_word.translate}`)
-            break
-
-        case context.scene.state.sent_word.translate:
-        
-            
-            if ( context.scene.state.counter == 0 ) {
-                await context.reply('ты прорешал все слова, из словаря')
-                await context.scene.leave()
-                break
-            }
-
+    if (context.scene.state.sent_word.translate === context.message.text.toLocaleLowerCase()) {
+        if ( context.scene.state.counter === getLength(words) ) {
+            context.scene.state.counter = 0
             context.scene.state.sent_word = words[context.scene.state.counter]
-            await context.reply(`Правильно, а как переводиться это слово ? ${words[context.scene.state.counter]?.word}`)
-            context.scene.state.counter = context.scene.state.counter - 1
-            break
+            await context.reply(` ${words[context.scene.state.counter]?.word}`)
+            context.scene.state.counter++
+            return
+        }
 
-        
-        default:
-            await context.reply('это слово переводиться по-дрогому, подумай ещё)')
-            console.log(context.scene.state)
-            break  
-
-
+        words[context.scene.state.counter-1].right_answered++
+        words[context.scene.state.counter-1].count_showed++
+        context.reply(`${words[context.scene.state.counter]?.word}`)
+        context.scene.state.sent_word = words[context.scene.state.counter]
+        context.scene.state.counter++
+        return
+    } else {
+        if (context.scene.state.mistake == 4) {
+            context.reply(`это слово преаводится так ${words[context.scene.state.counter].translate}, запомни) `)
+            context.scene.state.counter++
+            context.scene.state.sent_word = words[context.scene.state.counter]
+            context.reply(`${words[context.scene.state.counter]?.word}`)
+            context.scene.state.mistake = 0
+            return
+        }
+        context.reply('не правильно, попробуй ещё')
+        context.scene.state.mistake++
     }
    
 })
