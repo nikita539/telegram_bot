@@ -2,8 +2,8 @@ const { Scenes } = require('telegraf')
 const words = require('../words.json')
 const { 
     getLength
- } = require('../utils.js')
- const { SCENES_NAMES } = require('../enums/scenes_names')
+} = require('../utils.js')
+const { SCENES_NAMES } = require('../enums/scenes_names')
 
 
 
@@ -15,42 +15,48 @@ const learn_scene = new Scenes.BaseScene(SCENES_NAMES.learn_words)
 
 
 learn_scene.enter(async (context) => {
-    context.scene.state.sent_word = words['0']
-    await context.reply(`Начнем изучение слов. Я буду присылать тебе слово на аглийском, а ты перевод\n как переводиться это слово ? ${words['0'].word}`)
-    context.scene.state.counter = 1
-    context.scene.state.mistake = 0
+    const sceneState = context.scene.state
+
+    sceneState.counter = 0
+    sceneState.mistake = 0
+    await context.reply(`Начнем изучение слов. Я буду присылать тебе слово на аглийском, а ты перевод\n как переводиться это слово ? ${words[sceneState.counter].word}`)
+    sceneState.sent_word = words[sceneState.counter]
 })
+
 learn_scene.leave((context) => {
     context.reply('молодец, продолжай изучение новых слов')
 })
 
 learn_scene.on('text', async function(context) {
+    const sceneState = context.scene.state
     async function sendWord() {
-        await context.reply(`${words[context.scene.state.counter]?.word}`)
-        context.scene.state.sent_word = words[context.scene.state.counter]
-        context.scene.state.counter++
+        sceneState.counter++
+        sceneState.sent_word = words[sceneState.counter]
+        await context.reply(`${words[sceneState.counter]?.word}`)
     }
 
-    if (context.scene.state.sent_word.translate === context.message.text.toLocaleLowerCase()) {
-        if ( context.scene.state.counter === getLength(words) ) {
-            context.scene.state.counter = 0
-            sendWord()
+    if (sceneState.sent_word.translate === context.message.text.toLocaleLowerCase()) {
+        if ( sceneState.counter === getLength(words) - 1 ) {
+            sceneState.counter = 0
+            sceneState.sent_word = words[sceneState.counter]
+            await context.reply(`${words[sceneState.counter]?.word}`)
             return
         }
 
-        words[context.scene.state.counter-1].right_answered++
-        words[context.scene.state.counter-1].count_showed++
+        words[sceneState.counter].right_answered++
+        words[sceneState.counter].count_showed++
         sendWord()
         return
     } else {
-        if (context.scene.state.mistake == 4) {
-            context.reply(`это слово преаводится так ${words[context.scene.state.counter].translate}, запомни) `)
+        if (sceneState.mistake == 4) {
+            context.reply(`это слово преаводится так ${words[sceneState.counter].translate}, запомни) `)
+            sceneState.mistake = 0
+            sceneState.counter = 0
             sendWord()
-            context.scene.state.mistake = 0
             return
         }
         context.reply('не правильно, попробуй ещё')
-        context.scene.state.mistake++
+        sceneState.mistake++
     }
    
 })
